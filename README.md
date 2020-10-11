@@ -1,51 +1,140 @@
 **The University of Melbourne**
 # COMP30019 – Graphics and Interaction
 
-## Workshop 2
+## Workshop 10
 
 
 # Introduction:
 
-In this lab you will learn about polygonal geometry, and how 3D *meshes* can be constructed out of simple primitives. To begin, clone this repository and open it in Unity. 
-You will need to work with three files to start off with:
-* **MainScene.unity** - A Unity scene containing a partially formed cube entity. You will be working with this scene.
-* **CubeScript.cs** - The C# script which constructs and renders the cube geometry, attached to the cube entity.
-* **VertexColorShader.shader** - A Cg/HLSL shader used to render the cube. Note that you do not need to worry about the workings of shaders for this lab. We will briefly modify the file for the purposes of some demonstrations, but you do not need to understand how the code in it works.
+For this practice you will be making a simple conveyor system to sort items by what the item represents. This system will have an item generator machine, conveyor belts and sorting machine. The scene will be in 3D but be represented in an orthographic perspective.
 
 # Task:
 
-1. Open `MainScene.unity` in Unity. Press the ‘Play’ button and you should see a partially rendered cube. Switch to the ‘Scene’ tab so you can navigate the view using the mouse: The middle button/scroll wheel allows you to drag/zoom the view and dragging with the right mouse button allows you to rotate the view.
-  * Navigate the view to look at the cube from different angles. It may help to right-click the ‘scene gizmo’ located in the top-right of the viewport in order to select different angles to view the cube from. Which two faces are missing?
-  * Open `VertexColorShader.shader` and remove the line `Cull Off` and save the file. Make sure you keep this code removed for the remainder of the lab. Examine the cube again in the Unity editor. What did `Cull Off` do?
-  
-2. Add vertex definitions to `CubeScript.cs` to complete the cube (add the missing faces). Culling is now on, so make sure you use the correct vertex winding order such that the triangles you define are visible from the outside of the cube.
+1. Open `\Assets\Scenes\MachineSystemScene.unity` in Unity and press the `Play` button. You can see that... nothing is happening, that’s because you’ll be adding the functionality!
 
 <p align="center">
   <img src="Gifs/2-Cube.gif">
 </p>
 
-3. Create a new script component called `PyramidScript.cs` to define an upward facing square pyramid. The tip of the pyramid should be located at `(0.0, 1.0, 0.0)`. You may wish to copy the cube script as a starting point. Give each face a unique colour. Remember to create a new empty game object to attach the script to, and make sure you set its transform component so it does not overlap the cube in any way.
+**Creating the item**
+You’ll start with creating the item.
+
+  
+2. Create a Cube and change its size to 0.2 units, and add a RigidBody component This will give the cube physics, so it can fall and be pushed around.
+**a** Let’s make it bouncy now. In the project window go to the Other folder and right click,
+create a Physics Material. Select it and in the inspector give it a bouncy value of 0.5 
+**b** Select the cube in the scene and drag the newly create physics material into the Box
+Collider component. If you hit play and drag the cube up high, you can see how it will
+bounce around.
+
+<p align="center">
+  <img src="Gifs/2-Cube.gif">
+</p>
+
+3. Create a script in the scripts folder called `ConveyorItem` and attach it to the Cube in the scene
+**a** Open the `ConveyorItem.cs`.
+**b** The sorting machine will need to know what type of item it is, you can solve this with
+enumeration! You can create an enum type by writing this at the bottom of the class
+
+```c# 
+public enum ItemType
+{
+	Apple, 
+	Pear, 
+	Orange, 
+	Blueberry
+}
+```
+
+**c** Create a public variable for this enum in the class, this will allow us to assign it in the scene itself through the inspector window
+ 
+**d** In the Start() method write functionality that will take the ItemType and change the cubes colour depending on the type you assign it. You can do this by getting the renderer component, get the instance material, and set the colour to
+	i. Red for Apple 
+	ii. Green for Pear
+	iii. Orange for Orange
+	iv. Blue for Blueberry
+
+**e** You can test to see if this works by changing the ItemType in the inspector and pressing
+play to see if the colour changes. If all is good, then you can turn this item into a prefab. To do that simply drag the cube from the scene hierarchy into the project window. Drag it into the Prefabs folder.
+
+**Moving the conveyor belts**
+
+Now to provide the conveyor belts the functionality of moving items across. For this you need make the animation of belt appear to move and move the items themselves.
 
 <p align="center">
   <img src="Gifs/3-Pyramid.gif">
 </p>
 
-4. Navigate the view to look from the inside of the cube. Since back-face culling is on, you won’t be able to see the inside faces of the cube. Modify the index generation code in `CubeScript.cs` (near the end of the script) so that you can see the interior of the cube instead of the exterior. What other ways could you achieve this effect (there are at least two)?
+4. Create a class called `BeltMovement.cs` and attach it to belt gameobject under one of the conveyor belts in the scene. In the inspector at the top, click apply to apply this new component to all the other conveyor belts. This is how prefabs can be used, to sync duplicate gameobjects.
+
+**a** Open the `BeltMovement.cs` and create a variable _beltMaterial of type Material. Assign this variable in the `Start()` method to the first material that the RendererComponent has. You will be accessing this component in the update loop, so it’s best practice to store this component as a variable. This is assuming of course that the component will not be null as the game progresses.
+
+**b** The way that you are going to make the belt appear to be moving is by translating the texture that the mesh has vertically by changing it’s offset. The image shown below shows the UV mapping of the belt mesh. By moving the texture vertically, the belt should give the illusion of the belt moving the tracks. Have a look at the texture the object is using, you may be wondering why it looks unlike the texture below. This is because the image take advantage of tiling the texture onto the mesh. Think of some advantages that this may provide.
+
+**c** Next thing you’ll be doing is moving any item that is on belt. When it comes to collisions there are three different types of method you can override: OnCollisionEnter, OnCollisionStay, OnCollisionExit they are used for what you can imagine a gameobject that starts to touch the collider, staying in the collider and stop touching the collider.
+ 
+**d** For moving items use OnCollisionStay, add this override to the class:
+```C#
+    void OnCollisionStay(Collision collisionInfo)
+```
+
+You can access the rigidbody component of the item that the belt is colliding with by
+accessing the rigidbody component in collisionInfo. Use the `MovePosition()` method to move the item in the direction of the belt. The direction of the belt can be determined by accessing the transform.forward Vector3 attribute and using that in relation to the item’s next position.
+
+**e** You can test the functionality on the conveyor belts by dropping the item onto the conveyor belts. Hopefully it should move along the belts!
+
+**Sorting Machine**
+Alrighty Now you’re going to make the sorting machine teleport items from one conveyor belt to another depending on what type the item going is.
+
+5. First start by creating a script called `SortingMachineController` and attach to the SortingMachine.
+
+**a** Open the class and begin by creating two public variables called LeftExit and RightExit with the type of transform.
+
+**b** Save the file and go back to the editor. Assign the two variables that you just created in the inspector to the LeftExit and RightExit child gameobjects within the SortingMachine gameobject.
+
+**c** In the Box Collider component tick the IsTrigger Boolean to mark the type of collider the machine has.
+
+**d** With unity there are two different ways objects can collide with each other: Collisions and Triggers. An example of a collision would be a ball falling onto the ground, upon impact there is a collision. An example of a trigger would be walking to an automatic sliding door. When you get close enough the doors open, the area that you walk through is the trigger that instructs the door to open.
 
 <p align="center">
-  <img src="Gifs/4-Inside.gif">
+  <img src="Gifs/3-Pyramid.gif">
 </p>
 
-Constructing 3D meshes by manually defining vertices is tedious and rarely done in practice. However, the ability to define vertices in code is useful if we wish to procedurally generate a mesh based on some sort of algorithm.
+There are three overrides you can use are `OnTriggerEnter`, `OnTriggerStay` and `OnTriggerExit`.
 
-5. **Challenge**. This exercise is a great preparation for assignment 1. Write a script to procedurally generate a closed cone. Use public class attributes to allow parameters of the cone to be set from the editor, such as the radius. Hint: You can think of a cone as a generalisation of the pyramid you manually defined in this lab. The vertices of the base will form a circle rather than a square, and there’ll be one vertex for the tip. Maths functions like `sin()` and `cos()` should help.
+For this case use OnTriggerEnter like so
+```c#
+void OnTriggerEnter(Collider other)
+```
+ 
+**e** To sort the items coming in you need access to the ConveyorItem component that’s attached to it. You can do so by accessing the gameobject contained in the other object passed through the arguments of the method.
 
-<p align="middle">
-  <img src="Gifs/5-Challenge.gif">
-  <img src="Gifs/Sinus_en_cosinus.png">
-</p>
+Sort the items by:
+▪ Apple -> Right
+▪ Pear -> Right
+▪ Orange -> Left
+▪ Blueberry -> Left
+
+You can sort the items by changing the position and rotation of the item to the transform
+of either ExitLeft and ExitRight.
+
+**f** Try testing it out by putting items onto the belts and hope that the sorting machine works
 
 
-An alternative to defining meshes programmatically is to use a 3D modelling tool to construct them using a graphical user interface (a free, open-source tool you might wish to try is called Blender). Models can be saved as various file formats, many of which can be read by the Unity engine. A model can be imported to a Unity project simply by placing it in the “Assets” folder. Note that a “model” is typically more than just a “mesh” (although it doesn’t have to be). This is because meshes alone cannot capture the complexity of some objects.
+**Item Generator Machine**
 
-6. **Extension**. Search the web for some 3D models and try to import them into your Unity project. Models with the .fbx extension are generally well handled by Unity, but there are other formats work well too. Always keep in mind copyright and licensing when including such resources in your projects – there are many freebies out there, but licenses sometimes prohibit usage under certain circumstances (i.e. commercial uses).
+Almost done, now to make the item generator machine this will randomly spawn items at a frequent rate.
+
+6. Create a class called `GeneratorMachineController` and attach it to the Generator Machine.
+
+**a** Create a public variable called Exit with the type of Transform, ItemToSpawn as
+Gameobject and ItemParent as Transform.
+
+**b** Save and go back to the editor, drag the Item prefab that you created before to
+ItemToSpawn, Drag the Exit gameobject to the Exit variable, drag the SpawnedItems
+gameobject to parent.
+
+**c** Create a timer that calls a method every 0.8 seconds to spawn an item at the position of
+Exit with a randomly assigned ItemType. Make sure to change the parent of the item to ItemParent. This is used for organisation, otherwise the Hierarchy window will have many items in the root GameObject.
+
+
