@@ -8,12 +8,16 @@
 
 For this practice you will be making a simple conveyor system to sort items by what the item represents. This system will have an item generator machine, conveyor belts and sorting machine. The scene will be in 3D but be represented in an orthographic perspective.
 
+<p align="center">
+  <img src="Gifs/Final.gif" width="500">
+</p>
+
 # Task:
 
 **1.** Open `\Assets\Scenes\MachineSystemScene.unity` in Unity and press the `Play` button. You can see that... nothing is happening, that’s because you’ll be adding the functionality!
 
 <p align="center">
-  <img src="Gifs/Final.gif" width="300">
+  <img src="Gifs/Q1.png" width="300">
 </p>
 
 **Creating the item**  
