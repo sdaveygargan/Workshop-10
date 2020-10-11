@@ -4,13 +4,15 @@
 ## Workshop 10
 
 
+
 # Introduction:
 
 For this practice you will be making a simple conveyor system to sort items by what the item represents. This system will have an item generator machine, conveyor belts and sorting machine. The scene will be in 3D but be represented in an orthographic perspective.
 
 <p align="center">
-  <img src="Gifs/Final.gif" width="500">
+  <img src="Gifs/Final.gif" width="400">
 </p>
+
 
 # Task:
 
