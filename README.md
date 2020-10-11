@@ -22,17 +22,17 @@ For this practice you will be making a simple conveyor system to sort items by w
   <img src="Gifs/Q1.png" width="300">
 </p>
 
-**Creating the item**  
+## Creating the item
 
 You’ll start with creating the item.
 
   
 2. Create a Cube and change its size to 0.2 units, and add a RigidBody component This will give the cube physics, so it can fall and be pushed around.
 
-- Let’s make it bouncy now. In the project window go to the Other folder and right click,
+  - Let’s make it bouncy now. In the project window go to the Other folder and right click,
 create a Physics Material. Select it and in the inspector give it a bouncy value of 0.5 
 
-- Select the cube in the scene and drag the newly create physics material into the Box
+  - Select the cube in the scene and drag the newly create physics material into the Box
 Collider component. If you hit play and drag the cube up high, you can see how it will
 bounce around.
 
@@ -64,7 +64,7 @@ public enum ItemType
 - You can test to see if this works by changing the ItemType in the inspector and pressing
 play to see if the colour changes. If all is good, then you can turn this item into a prefab. To do that simply drag the cube from the scene hierarchy into the project window. Drag it into the Prefabs folder.
 
-**Moving the conveyor belts**  
+## Moving the conveyor belts
 
 Now to provide the conveyor belts the functionality of moving items across. For this you need make the animation of belt appear to move and move the items themselves.
 
@@ -91,7 +91,7 @@ accessing the rigidbody component in collisionInfo. Use the `MovePosition()` met
 
 - You can test the functionality on the conveyor belts by dropping the item onto the conveyor belts. Hopefully it should move along the belts!
 
-**Sorting Machine**  
+## Sorting Machine
 
 Alrighty Now you’re going to make the sorting machine teleport items from one conveyor belt to another depending on what type the item going is.
 
@@ -130,7 +130,7 @@ of either ExitLeft and ExitRight.
 - Try testing it out by putting items onto the belts and hope that the sorting machine works
 
 
-**Item Generator Machine**  
+## Item Generator Machine 
 
 Almost done, now to make the item generator machine this will randomly spawn items at a frequent rate.
 
