@@ -13,7 +13,7 @@ For this practice you will be making a simple conveyor system to sort items by w
 1. Open `\Assets\Scenes\MachineSystemScene.unity` in Unity and press the `Play` button. You can see that... nothing is happening, that’s because you’ll be adding the functionality!
 
 <p align="center">
-  <img src="Gifs/2-Cube.gif">
+  <img src="Gifs/Final.gif width="300"
 </p>
 
 **Creating the item**
@@ -26,10 +26,6 @@ create a Physics Material. Select it and in the inspector give it a bouncy value
 **b** Select the cube in the scene and drag the newly create physics material into the Box
 Collider component. If you hit play and drag the cube up high, you can see how it will
 bounce around.
-
-<p align="center">
-  <img src="Gifs/2-Cube.gif">
-</p>
 
 3. Create a script in the scripts folder called `ConveyorItem` and attach it to the Cube in the scene
 **a** Open the `ConveyorItem.cs`.
@@ -61,15 +57,16 @@ play to see if the colour changes. If all is good, then you can turn this item i
 
 Now to provide the conveyor belts the functionality of moving items across. For this you need make the animation of belt appear to move and move the items themselves.
 
-<p align="center">
-  <img src="Gifs/3-Pyramid.gif">
-</p>
 
 4. Create a class called `BeltMovement.cs` and attach it to belt gameobject under one of the conveyor belts in the scene. In the inspector at the top, click apply to apply this new component to all the other conveyor belts. This is how prefabs can be used, to sync duplicate gameobjects.
 
 **a** Open the `BeltMovement.cs` and create a variable _beltMaterial of type Material. Assign this variable in the `Start()` method to the first material that the RendererComponent has. You will be accessing this component in the update loop, so it’s best practice to store this component as a variable. This is assuming of course that the component will not be null as the game progresses.
 
 **b** The way that you are going to make the belt appear to be moving is by translating the texture that the mesh has vertically by changing it’s offset. The image shown below shows the UV mapping of the belt mesh. By moving the texture vertically, the belt should give the illusion of the belt moving the tracks. Have a look at the texture the object is using, you may be wondering why it looks unlike the texture below. This is because the image take advantage of tiling the texture onto the mesh. Think of some advantages that this may provide.
+
+<p align="center">
+  <img src="Gifs/Q4.png" width="300">
+</p>
 
 **c** Next thing you’ll be doing is moving any item that is on belt. When it comes to collisions there are three different types of method you can override: OnCollisionEnter, OnCollisionStay, OnCollisionExit they are used for what you can imagine a gameobject that starts to touch the collider, staying in the collider and stop touching the collider.
  
@@ -97,7 +94,7 @@ Alrighty Now you’re going to make the sorting machine teleport items from one 
 **d** With unity there are two different ways objects can collide with each other: Collisions and Triggers. An example of a collision would be a ball falling onto the ground, upon impact there is a collision. An example of a trigger would be walking to an automatic sliding door. When you get close enough the doors open, the area that you walk through is the trigger that instructs the door to open.
 
 <p align="center">
-  <img src="Gifs/3-Pyramid.gif">
+  <img src="Gifs/Q5.png" width="600">
 </p>
 
 There are three overrides you can use are `OnTriggerEnter`, `OnTriggerStay` and `OnTriggerExit`.
