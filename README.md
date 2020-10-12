@@ -55,11 +55,11 @@ public enum ItemType
 
 - Create a public variable for this enum in the class, this will allow us to assign it in the scene itself through the inspector window
  
-- In the Start() method write functionality that will take the ItemType and change the cubes colour depending on the type you assign it. You can do this by getting the renderer component, get the instance material, and set the colour to
-	i. Red for Apple 
-	ii. Green for Pear
-	iii. Orange for Orange
-	iv. Blue for Blueberry
+- In the Start() method write functionality that will take the ItemType and change the cubes colour depending on the type you assign it. You can do this by getting the renderer component, get the instance material, and set the colour to  
+	i. Red for Apple  
+	ii. Green for Pear  
+	iii. Orange for Orange  
+	iv. Blue for Blueberry  
 
 - You can test to see if this works by changing the ItemType in the inspector and pressing
 play to see if the colour changes. If all is good, then you can turn this item into a prefab. To do that simply drag the cube from the scene hierarchy into the project window. Drag it into the Prefabs folder.
